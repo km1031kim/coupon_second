@@ -34,6 +34,6 @@
 -> 스트리밍 처리해야한다.  
   
 파일 업로드 -> 로컬 혹은 외부 볼륨에 임시 저장 -> 스트리밍을 통한 검증 -> 검증 완료 후 s3 업로드 -> 임시 저장 파일 제거
-FileHandler -> FileReader -> FileValidator              ->  FileHandler -> FileHandler
-upload()        read()        List<ValidateCondition>       upload();      remove();
-                              isSatisfieldBy();
+<img width="791" height="345" alt="image" src="https://github.com/user-attachments/assets/44c78731-9f05-45cf-b2e9-6f21de37dad3" />
+
+
