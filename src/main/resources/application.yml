@@ -14,6 +14,14 @@ spring:
         format_sql: true
         default_batch_fetch_size: 100
 
+  servlet:
+    multipart:
+      max-file-size: 10MB        # 파일 하나의 최대 크기
+      max-request-size: 10MB     # 요청 전체의 최대 크기 (파일 여러 개 포함)
+      file-size-threshold: 2MB    # 이 크기 이상이면 디스크에 임시 저장
+      location: C:\Users\user\Desktop\study\mentoring\coupon_second\tmp
+
+
 logging.level:
   org.hibernate.SQL: debug
 # org.hibernate.type: trace
