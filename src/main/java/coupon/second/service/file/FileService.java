@@ -1,6 +1,8 @@
 package coupon.second.service.file;
 
 import coupon.second.service.file.io.FileHandler;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -8,14 +10,17 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 public class FileService {
     private final List<FileHandler> handlerList;
     private static final String TEMP_PREFIX = "temp-";
 
+    @Value("${app.file.local-dir}")
+    private String localUploadDir;
+
     public FileService(List<FileHandler> handlerList) {
         this.handlerList = handlerList;
     }
-
 
     public String upload(MultipartFile file) throws IOException {
 
@@ -23,18 +28,17 @@ public class FileService {
         checkFileName(originalFilename);
 
         String extension = extractExtension(originalFilename);
-        FileHandler handler = getHandler(extension);
 
-        File tempFile = File.createTempFile(TEMP_PREFIX, "." +  extension);
+        File tempFile = new File(localUploadDir, file.getOriginalFilename());
         file.transferTo(tempFile);
 
+        FileHandler handler = getHandler(extension);
+
         try {
-            handler.process(tempFile);
+            handler.process(tempFile); // 결과를 -> s3로 리턴받자.
         } finally {
             tempFile.delete();
         }
-
-
 
         return tempFile.getAbsolutePath();
     }
