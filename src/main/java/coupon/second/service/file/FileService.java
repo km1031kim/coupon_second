@@ -1,5 +1,6 @@
 package coupon.second.service.file;
 
+import com.opencsv.exceptions.CsvValidationException;
 import coupon.second.service.file.io.FileHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,7 +23,7 @@ public class FileService {
         this.handlerList = handlerList;
     }
 
-    public String upload(MultipartFile file) throws IOException {
+    public String upload(MultipartFile file) throws CsvValidationException, IOException {
 
         String originalFilename = file.getOriginalFilename();
         checkFileName(originalFilename);
@@ -33,9 +34,9 @@ public class FileService {
         file.transferTo(tempFile);
 
         FileHandler handler = getHandler(extension);
-
         try {
-            handler.process(tempFile); // 결과를 -> s3로 리턴받자.
+            handler.process(tempFile);
+            log.info("파일처리 끝");
         } finally {
             tempFile.delete();
         }

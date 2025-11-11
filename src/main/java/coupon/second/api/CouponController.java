@@ -1,5 +1,6 @@
 package coupon.second.api;
 
+import com.opencsv.exceptions.CsvValidationException;
 import coupon.second.service.file.FileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +21,7 @@ public class CouponController {
     private final FileService fileService;
 
     @PostMapping("/upload")
-    public Long upload(@RequestPart MultipartFile file) throws IOException {
+    public Long upload(@RequestPart MultipartFile file) throws CsvValidationException, IOException {
         log.info("[fileInfo] contentType : " + file.getContentType() + ", originalFilename : " + file.getOriginalFilename());
         fileService.upload(file);
 

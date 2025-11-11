@@ -28,6 +28,7 @@ app:
   file:
     local-dir: C:\Users\USER\Desktop\study\coupon_second\tmp\multipart # multipartFile 저장 디렉토리
 
+
 logging.level:
   org.hibernate.SQL: debug
 # org.hibernate.type: trace

@@ -1,20 +1,12 @@
 package coupon.second.service.file.validate;
 
-import coupon.second.service.file.validate.condition.FileValidateCondition;
-import lombok.RequiredArgsConstructor;
+import com.opencsv.exceptions.CsvValidationException;
 
-import java.util.List;
+import java.io.File;
+import java.io.IOException;
 
-@RequiredArgsConstructor
-public class FileValidator {
+public interface FileValidator {
 
-    private final List<FileValidateCondition> conditions;
+    void validate(File file) throws IOException, CsvValidationException;
 
-    public void validate(String[] columns, long lineNumber) {
-        if (lineNumber == 1) {
-            // 헤더 검증만 수행
-        } else {
-            // 데이터 검증 수행
-        }
-    }
 }
