@@ -2,9 +2,8 @@ package coupon.second.service.file.validate;
 
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
-import coupon.second.common.exception.InvalidHeaderException;
+import coupon.second.common.exception.InvalidFileException;
 import coupon.second.service.file.validate.condition.FileValidateCondition;
-import coupon.second.service.file.validate.condition.HeaderCondition;
 import coupon.second.service.file.validate.condition.HeaderValidateCondition;
 import coupon.second.service.file.validate.condition.RowValidateCondition;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +13,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Iterator;
 import java.util.List;
 
 @Slf4j
@@ -25,24 +25,39 @@ public class CSVFileValidator implements FileValidator {
     @Override
     public void validate(File file) throws IOException, CsvValidationException {
         try (CSVReader reader = new CSVReader(new InputStreamReader(new FileInputStream(file)))) {
-            String[] header = reader.readNext();
-            for (FileValidateCondition condition : conditions) {
-                if (condition instanceof HeaderValidateCondition) {
-                    condition.validate(header);
-                }
-            }
 
-            // CSVReader의 readNext() 메서드는 파일 끝에 도달시 null을 반환한다.
-            // 파일 중간에서 null을 반환하는 상황과 분리해야 한다.
-            while (true) {
-                String[] row = reader.readNext();
+            Iterator<String[]> iterator = reader.iterator();
+            validateFileContentExists(iterator);
 
-                for (FileValidateCondition condition : conditions) {
-                    if (condition instanceof RowValidateCondition) {
-                        condition.validate(row);
-                    }
-                }
+            String[] header = iterator.next();
+            applyCondition(header, HeaderValidateCondition.class);
+
+            validateDataRowsExist(iterator);
+
+            while (iterator.hasNext()) {
+                String[] row = iterator.next();
+                applyCondition(row, RowValidateCondition.class);
             }
+        }
+    }
+
+    private void validateFileContentExists(Iterator<String[]> iterator) {
+        if (!iterator.hasNext()) {
+            throw new InvalidFileException("파일 내부 데이터가 존재하지 않습니다.");
+        }
+    }
+
+    private void applyCondition(String[] row, Class<? extends FileValidateCondition> conditionType) {
+        for (FileValidateCondition condition : conditions) {
+            if (conditionType.isInstance(condition)) {
+                condition.validate(row);
+            }
+        }
+    }
+
+    private void validateDataRowsExist(Iterator<String[]> iterator) {
+        if (!iterator.hasNext()) {
+            throw new InvalidFileException("데이터 행이 존재하지 않습니다.");
         }
     }
 }

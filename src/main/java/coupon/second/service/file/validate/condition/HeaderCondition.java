@@ -1,13 +1,14 @@
 package coupon.second.service.file.validate.condition;
 
+import coupon.second.common.exception.InvalidFileException;
 import coupon.second.common.exception.InvalidHeaderException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.annotation.Order;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
 
-@Order(1)
+@Slf4j
 @RequiredArgsConstructor
 public class HeaderCondition implements HeaderValidateCondition {
 
@@ -15,28 +16,20 @@ public class HeaderCondition implements HeaderValidateCondition {
 
     @Override
     public void validate(String[] row) {
-        validateHeaderNotNull(row);
         validateHeaderSize(row);
         validateHeaderValues(row);
     }
 
-    private void validateHeaderNotNull(String[] row) {
-        if (row == null) {
-            throw new InvalidHeaderException("CSV 헤더가 존재하지 않습니다.");
-        }
-    }
-
     private void validateHeaderSize(String[] row) {
         if (row.length != headers.size()) {
-            throw new InvalidHeaderException("헤더 길이가 다릅니다. 실제: " + row.length + ", 기대: " + headers.size()
-            );
+            throw new InvalidHeaderException("헤더 길이가 다릅니다. 헤더길이:" + headers.size() + ", 입력길이:" + row.length);
         }
     }
 
     private void validateHeaderValues(String[] row) {
         for (int i = 0; i < headers.size(); i++) {
             if (!headers.get(i).equals(row[i])) {
-                throw  new InvalidHeaderException("헤더 검증 실패. 실제 : " + row[i] + ", 기대 : " + headers.get(i));
+                throw new InvalidHeaderException("헤더 검증 실패. 헤더:" + headers.get(i) + ", 입력:" + row[i]);
             }
         }
     }

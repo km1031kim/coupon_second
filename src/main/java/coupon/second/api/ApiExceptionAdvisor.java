@@ -2,6 +2,7 @@ package coupon.second.api;
 
 import coupon.second.api.dto.ApiResponse;
 import coupon.second.common.enums.ReturnCode;
+import coupon.second.common.exception.InvalidFileException;
 import coupon.second.common.exception.InvalidHeaderException;
 import coupon.second.common.exception.InvalidRowException;
 import coupon.second.common.exception.UserAlreadyInactiveException;
@@ -67,6 +68,12 @@ public class ApiExceptionAdvisor {
 
     @ExceptionHandler(InvalidRowException.class)
     public ApiResponse<?> handleInvalidRowException(InvalidRowException e) {
+        return ApiResponse.of(ReturnCode.BAD_REQUEST, e.getMessage());
+    }
+
+
+    @ExceptionHandler(InvalidFileException.class)
+    public ApiResponse<?> handleInvalidFileException(InvalidFileException e) {
         return ApiResponse.of(ReturnCode.BAD_REQUEST, e.getMessage());
     }
 }

@@ -7,7 +7,7 @@ import coupon.second.service.file.validate.ExcelFileValidator;
 import coupon.second.service.file.validate.condition.FileValidateCondition;
 import coupon.second.service.file.validate.condition.Header;
 import coupon.second.service.file.validate.condition.HeaderCondition;
-import coupon.second.service.file.validate.condition.NonEmptyRowCondition;
+import coupon.second.service.file.validate.condition.RowContentCondition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -42,8 +42,8 @@ public class FileServiceBeanConstructor {
     }
 
     @Bean
-    public NonEmptyRowCondition nonEmptyRowCondition() {
-        return new NonEmptyRowCondition(Header.headers());
+    public RowContentCondition nonEmptyRowCondition() {
+        return new RowContentCondition(Header.headers());
     }
 
     @Bean
