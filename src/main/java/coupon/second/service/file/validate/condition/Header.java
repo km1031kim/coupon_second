@@ -7,8 +7,7 @@ import java.util.List;
 
 @Getter
 public enum Header {
-    CUSTOMER_ID("customer_id"),
-    ADDRESS("address");
+    CUSTOMER_ID("customer_id");
 
     private final String header;
 

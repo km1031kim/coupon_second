@@ -33,6 +33,7 @@ public class FileService {
         File tempFile = new File(localUploadDir, file.getOriginalFilename());
         file.transferTo(tempFile);
 
+
         FileHandler handler = getHandler(extension);
         try {
             handler.process(tempFile);

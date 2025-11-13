@@ -1,5 +1,7 @@
 package coupon.second.common.util;
 
+import coupon.second.common.exception.InvalidHeaderException;
+import coupon.second.common.exception.InvalidRowException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Cell;
@@ -14,7 +16,6 @@ import static org.apache.poi.ss.usermodel.Row.MissingCellPolicy.CREATE_NULL_AS_B
 @RequiredArgsConstructor
 public class ExcelRowReader {
     private final DataFormatter formatter;
-
 
     /**
      * 헤더 리스트와 동일한 크기를 갖는 String 배열을 생성한 후 row 를 순회하며 배열을 채워나갑니다.
@@ -32,4 +33,12 @@ public class ExcelRowReader {
         return rowStr;
     }
 
+    public void checkRowIsNotNull(Row row, int index) {
+        if (row == null) {
+            if (index == 0) {
+                throw new InvalidHeaderException("헤더가 존재하지 않습니다.");
+            }
+            throw new InvalidRowException((index + 1) + " 행 데이터가 존재하지 않습니다.");
+        }
+    }
 }

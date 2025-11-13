@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 public class HeaderCondition implements HeaderValidateCondition {
 
     @Override
-    public void validate(String[] row) {
+    public void validate(String[] row, int index) {
         validateHeaderSize(row);
         validateHeaderValues(row);
     }
