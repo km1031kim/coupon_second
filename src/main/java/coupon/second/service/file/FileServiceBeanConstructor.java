@@ -1,13 +1,14 @@
 package coupon.second.service.file;
 
+import coupon.second.common.util.ExcelRowReader;
 import coupon.second.service.file.io.CsvFileHandler;
 import coupon.second.service.file.io.ExcelFileHandler;
 import coupon.second.service.file.validate.CSVFileValidator;
 import coupon.second.service.file.validate.ExcelFileValidator;
 import coupon.second.service.file.validate.condition.FileValidateCondition;
-import coupon.second.service.file.validate.condition.Header;
 import coupon.second.service.file.validate.condition.HeaderCondition;
-import coupon.second.service.file.validate.condition.RowContentCondition;
+import coupon.second.service.file.validate.condition.MandatoryRowCondition;
+import org.apache.poi.ss.usermodel.DataFormatter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -28,7 +29,7 @@ public class FileServiceBeanConstructor {
 
     @Bean
     public ExcelFileHandler excelFileHandler(List<FileValidateCondition> conditions) {
-        return new ExcelFileHandler(excelFileValidator(conditions));
+        return new ExcelFileHandler(excelFileValidator(conditions, excelRowReader()));
     }
 
     @Bean
@@ -37,18 +38,23 @@ public class FileServiceBeanConstructor {
     }
 
     @Bean
-    public ExcelFileValidator excelFileValidator(List<FileValidateCondition> conditions) {
-        return new ExcelFileValidator(conditions);
+    public ExcelFileValidator excelFileValidator(List<FileValidateCondition> conditions, ExcelRowReader excelRowReader) {
+        return new ExcelFileValidator(conditions, excelRowReader);
     }
 
     @Bean
-    public RowContentCondition nonEmptyRowCondition() {
-        return new RowContentCondition(Header.headers());
+    public MandatoryRowCondition nonEmptyRowCondition() {
+        return new MandatoryRowCondition();
     }
 
     @Bean
     public HeaderCondition headerCondition() {
-        return new HeaderCondition(Header.headers());
+        return new HeaderCondition();
+    }
+
+    @Bean
+    public ExcelRowReader excelRowReader() {
+        return new ExcelRowReader(new DataFormatter());
     }
 
 }

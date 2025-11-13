@@ -3,12 +3,8 @@ package coupon.second.service.file.validate.condition;
 import coupon.second.common.exception.InvalidRowException;
 import lombok.RequiredArgsConstructor;
 
-import java.util.List;
-
 @RequiredArgsConstructor
-public class RowContentCondition implements RowValidateCondition {
-
-    private final List<String> headers;
+public class MandatoryRowCondition implements RowValidateCondition {
 
     @Override
     public void validate(String[] row) {
@@ -18,9 +14,10 @@ public class RowContentCondition implements RowValidateCondition {
 
     private void validateRowSize(String[] row) {
         if (headers.size() != row.length) {
-            throw new InvalidRowException("행 길이가 다릅니다. 실제 : " + row.length + ", 기대 : " + headers.size());
+            throw new InvalidRowException("입력 컬럼 수가 다릅니다. 헤더 컬럼 수 : " + headers.size() + ", 입력 행 컬럼 수 : " + row.length);
         }
     }
+
 
     private void validateRowValues(String[] row) {
         for (int i = 0; i < row.length; i++) {

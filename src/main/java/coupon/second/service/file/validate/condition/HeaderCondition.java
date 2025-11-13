@@ -1,18 +1,13 @@
 package coupon.second.service.file.validate.condition;
 
-import coupon.second.common.exception.InvalidFileException;
 import coupon.second.common.exception.InvalidHeaderException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.List;
 
 
 @Slf4j
 @RequiredArgsConstructor
 public class HeaderCondition implements HeaderValidateCondition {
-
-    private final List<String> headers;
 
     @Override
     public void validate(String[] row) {

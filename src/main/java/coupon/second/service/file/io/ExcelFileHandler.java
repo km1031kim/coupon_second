@@ -4,6 +4,7 @@ import coupon.second.service.file.validate.ExcelFileValidator;
 import coupon.second.service.file.validate.FileValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.*;
 
@@ -21,10 +22,6 @@ public class ExcelFileHandler implements FileHandler {
 
     @Override
     public void process(File file) throws IOException {
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-
-            String s = br.readLine();
-            log.info(s);
-        }
+        excelFileValidator.validate(file);
     }
 }
