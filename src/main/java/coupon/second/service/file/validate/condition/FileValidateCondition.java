@@ -1,6 +1,9 @@
 package coupon.second.service.file.validate.condition;
 
-public interface FileValidateCondition {
+import java.util.List;
 
-    boolean isValid();
+public interface FileValidateCondition {
+    List<String> headers = Header.headers();
+
+    void validate(String[] row, int index);
 }
