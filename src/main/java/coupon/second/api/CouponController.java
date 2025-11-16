@@ -1,7 +1,10 @@
 package coupon.second.api;
 
 import com.opencsv.exceptions.CsvValidationException;
-import coupon.second.service.file.FileService;
+import coupon.second.api.dto.ApiResponse;
+import coupon.second.common.enums.ReturnCode;
+import coupon.second.service.dto.FileServiceResponse;
+import coupon.second.service.FileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -14,17 +17,12 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @RequestMapping("/file")
 public class CouponController {
-    /**
-     * 1.  쿠폰 저장 -> 스트리밍 검증
-     */
 
     private final FileService fileService;
 
     @PostMapping("/upload")
-    public Long upload(@RequestPart MultipartFile file) throws CsvValidationException, IOException {
-        log.info("[fileInfo] contentType : " + file.getContentType() + ", originalFilename : " + file.getOriginalFilename());
-        fileService.upload(file);
-
-        return null;
+    public ApiResponse<FileServiceResponse> upload(@RequestPart MultipartFile file) throws CsvValidationException, IOException {
+        FileServiceResponse fileServiceResponse = fileService.upload(file);
+        return ApiResponse.of(fileServiceResponse);
     }
 }

@@ -1,8 +1,12 @@
 package coupon.second.service.file;
 
+import com.azure.storage.blob.BlobContainerClient;
 import coupon.second.common.util.ExcelRowReader;
+import coupon.second.repository.FileMetaRepository;
+import coupon.second.service.FileService;
 import coupon.second.service.file.io.CsvFileHandler;
 import coupon.second.service.file.io.ExcelFileHandler;
+import coupon.second.service.file.upload.AzureFileUploader;
 import coupon.second.service.file.validate.CSVFileValidator;
 import coupon.second.service.file.validate.ExcelFileValidator;
 import coupon.second.service.file.validate.condition.FileValidateCondition;
@@ -18,8 +22,15 @@ import java.util.List;
 public class FileServiceBeanConstructor {
 
     @Bean
-    public FileService fileService(CsvFileHandler csvFileHandler, ExcelFileHandler excelFileHandler) {
-        return new FileService(List.of(csvFileHandler, excelFileHandler));
+    public FileService fileService(CsvFileHandler csvFileHandler, ExcelFileHandler excelFileHandler, AzureFileUploader azureFileUploader, FileMetaRepository fileMetaRepository) {
+        return new FileService(List.of(csvFileHandler, excelFileHandler), azureFileUploader, fileMetaRepository);
+    }
+
+
+
+    @Bean
+    public AzureFileUploader azureBlobFileUploader(BlobContainerClient blobContainerClient) {
+        return new AzureFileUploader(blobContainerClient);
     }
 
     @Bean

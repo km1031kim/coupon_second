@@ -1,6 +1,7 @@
 package coupon.second.service.file.io;
 
 import com.opencsv.exceptions.CsvValidationException;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;

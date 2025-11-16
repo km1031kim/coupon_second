@@ -5,9 +5,13 @@ spring:
     password:
     driver-class-name: org.h2.Driver
 
+  config:
+    import: optional:file:.env[.properties]
+
+
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     properties:
       hibernate:
         # show_sql: true
@@ -19,14 +23,20 @@ spring:
       max-file-size: 20MB        # 파일 하나의 최대 크기
       max-request-size: 20MB     # 요청 전체의 최대 크기 (파일 여러 개 포함)
       file-size-threshold: 1MB    # 이 크기 이상이면 디스크에 임시 저장
-      location: C:\Users\USER\Desktop\study\coupon_second\tmp # tomcat multipartFile 저장 디렉토리
+      # location: C:\Users\USER\Desktop\study\coupon_second\tmp\multipart # tomcat multipartFile 저장 디렉토리
       resolve-lazily: true
 
-
-
+  cloud:
+    azure:
+      storage:
+        blob:
+          account-name: ${AZURE_STORAGE_ACCOUNT_NAME}
+          endpoint: ${AZURE_STORAGE_ACCOUNT_ENDPOINT}
+          container-name: ${AZURE_STORAGE_BLOB_CONTAINER_NAME}
+          account-key: ${AZURE_STORAGE_ACCOUNT_KEY}
 app:
   file:
-    local-dir: C:\Users\USER\Desktop\study\coupon_second\tmp\multipart # multipartFile 저장 디렉토리
+    local-dir: C:\Users\USER\Desktop\study\coupon_second\ # multipartFile -> local 저장 디렉토리
 
 
 logging.level:

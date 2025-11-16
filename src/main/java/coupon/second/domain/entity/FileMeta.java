@@ -17,8 +17,8 @@ public class FileMeta extends BaseEntity {
     @GeneratedValue
     private Long id;
 
+    @Column(unique = true)
     private String originalFilename;
-    private String storedFilename;
     private String storagePath;
     private String extension;
     private String contentType;
@@ -29,18 +29,18 @@ public class FileMeta extends BaseEntity {
 
     @Builder
     public FileMeta(String originalFilename,
-                    String storedFilename,
                     String storagePath,
                     String extension,
                     String contentType,
                     long fileSize,
                     StorageType storageType) {
         this.originalFilename = originalFilename;
-        this.storedFilename = storedFilename;
         this.storagePath = storagePath;
         this.extension = extension;
         this.contentType = contentType;
         this.fileSize = fileSize;
         this.storageType = storageType;
     }
+
+
 }

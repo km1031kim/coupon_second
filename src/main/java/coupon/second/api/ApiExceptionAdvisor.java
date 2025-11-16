@@ -41,8 +41,8 @@ public class ApiExceptionAdvisor {
     }
 
     @ExceptionHandler(EntityExistsException.class)
-    public ApiResponse<?> handleEntityExistsException() {
-        return ApiResponse.of(ReturnCode.CONFLICT, "user is already existed");
+    public ApiResponse<?> handleEntityExistsException(EntityExistsException e) {
+        return ApiResponse.of(ReturnCode.CONFLICT, e.getMessage());
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
@@ -76,4 +76,11 @@ public class ApiExceptionAdvisor {
     public ApiResponse<?> handleInvalidFileException(InvalidFileException e) {
         return ApiResponse.of(ReturnCode.BAD_REQUEST, e.getMessage());
     }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ApiResponse<?> handleIllegalArgumentException(IllegalArgumentException e) {
+        return ApiResponse.of(ReturnCode.BAD_REQUEST, e.getMessage());
+    }
+
+
 }
