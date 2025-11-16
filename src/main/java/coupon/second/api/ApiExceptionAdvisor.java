@@ -2,6 +2,9 @@ package coupon.second.api;
 
 import coupon.second.api.dto.ApiResponse;
 import coupon.second.common.enums.ReturnCode;
+import coupon.second.common.exception.InvalidFileException;
+import coupon.second.common.exception.InvalidHeaderException;
+import coupon.second.common.exception.InvalidRowException;
 import coupon.second.common.exception.UserAlreadyInactiveException;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
@@ -38,8 +41,8 @@ public class ApiExceptionAdvisor {
     }
 
     @ExceptionHandler(EntityExistsException.class)
-    public ApiResponse<?> handleEntityExistsException() {
-        return ApiResponse.of(ReturnCode.CONFLICT, "user is already existed");
+    public ApiResponse<?> handleEntityExistsException(EntityExistsException e) {
+        return ApiResponse.of(ReturnCode.CONFLICT, e.getMessage());
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
@@ -56,4 +59,28 @@ public class ApiExceptionAdvisor {
     public ApiResponse<?> handleMaxSizeException() {
         return ApiResponse.of(ReturnCode.BAD_REQUEST, "파일 크기가 너무 큽니다. 최대 100MB까지 가능합니다.");
     }
+
+    @ExceptionHandler(InvalidHeaderException.class)
+    public ApiResponse<?> handleInvalidHeaderException(InvalidHeaderException e) {
+        return ApiResponse.of(ReturnCode.BAD_REQUEST, e.getMessage());
+    }
+
+
+    @ExceptionHandler(InvalidRowException.class)
+    public ApiResponse<?> handleInvalidRowException(InvalidRowException e) {
+        return ApiResponse.of(ReturnCode.BAD_REQUEST, e.getMessage());
+    }
+
+
+    @ExceptionHandler(InvalidFileException.class)
+    public ApiResponse<?> handleInvalidFileException(InvalidFileException e) {
+        return ApiResponse.of(ReturnCode.BAD_REQUEST, e.getMessage());
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ApiResponse<?> handleIllegalArgumentException(IllegalArgumentException e) {
+        return ApiResponse.of(ReturnCode.BAD_REQUEST, e.getMessage());
+    }
+
+
 }

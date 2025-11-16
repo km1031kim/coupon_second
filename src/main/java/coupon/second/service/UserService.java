@@ -55,7 +55,7 @@ public class UserService {
 
     private void checkDuplicatedEmail(String email) {
         if (userRepository.existsByEmail(email)) {
-            throw new EntityExistsException();
+            throw new EntityExistsException("같은 이메일의 유저가 이미 존재합니다.");
         }
     }
 }

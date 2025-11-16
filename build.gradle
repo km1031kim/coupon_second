@@ -1,6 +1,6 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.5.6'
+	id 'org.springframework.boot' version '3.3.1'
 	id 'io.spring.dependency-management' version '1.1.7'
 }
 
@@ -24,6 +24,18 @@ repositories {
 	mavenCentral()
 }
 
+ext {
+    // 사용 중인 Spring Boot 3.x 버전에 맞는 Spring Cloud Azure 버전 선택
+    // 예: Spring Boot 3.x용 Spring Cloud Azure 5.x 버전
+    springCloudAzureVersion = "5.14.0"
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "com.azure.spring:spring-cloud-azure-dependencies:${springCloudAzureVersion}"
+    }
+}
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -31,15 +43,20 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
 	annotationProcessor 'org.projectlombok:lombok'
+    implementation 'org.springframework.boot:spring-boot-starter'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
-
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-
     implementation 'org.springframework.data:spring-data-commons'
 
+	implementation 'com.opencsv:opencsv:5.6'
+
+    implementation 'org.apache.poi:poi:5.4.0'
+    implementation 'org.apache.poi:poi-ooxml:5.4.0'
+
+    implementation 'com.azure.spring:spring-cloud-azure-starter-storage-blob'
 
     implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
     annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
