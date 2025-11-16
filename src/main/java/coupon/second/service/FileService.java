@@ -7,6 +7,7 @@ import coupon.second.service.dto.FileServiceResponse;
 import coupon.second.service.file.io.FileHandler;
 import coupon.second.service.file.upload.FileUploader;
 import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,7 +33,6 @@ public class FileService {
     @Transactional
     public FileServiceResponse upload(MultipartFile file) throws CsvValidationException, IOException {
         log.info("upload 호출");
-
         String originalFilename = file.getOriginalFilename();
         checkFileName(originalFilename);
         String extension = extractExtension(originalFilename);
@@ -43,12 +43,10 @@ public class FileService {
         String uploadPath = null;
         FileHandler handler = getHandler(extension);
 
-
         try {
             checkDuplicatedFilename(originalFilename);
             handler.process(localFile);
 
-            log.info("업로드 시작 전");
             uploadPath = fileUploader.uploadFile(localFile, originalFilename);
 
             FileMeta fileMeta = FileMeta.builder()
@@ -60,7 +58,6 @@ public class FileService {
                     .build();
 
             FileMeta savedFileMeta = fileMetaRepository.save(fileMeta);
-
             return FileServiceResponse.from(savedFileMeta);
         } catch (RuntimeException e) {
             if (uploadPath != null) {
@@ -79,8 +76,6 @@ public class FileService {
             }
         }
     }
-
-
     private void checkFileName(String fileName) {
         if (fileName == null || fileName.isBlank()) {
             throw new IllegalArgumentException("파일 이름이 없습니다.");
@@ -113,5 +108,10 @@ public class FileService {
         if (isExist) {
             throw new EntityExistsException("같은 이름의 파일이 이미 존재합니다.");
         }
+    }
+
+    public FileServiceResponse find(Long fileId) {
+        FileMeta fileMeta = fileMetaRepository.findById(fileId).orElseThrow(() -> new EntityNotFoundException("ID에 해당하는 파일이 존재하지 않습니다."));
+        return FileServiceResponse.from(fileMeta);
     }
 }

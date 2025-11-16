@@ -13,16 +13,11 @@ import java.io.UncheckedIOException;
 @RequiredArgsConstructor
 public class AzureFileUploader implements FileUploader {
 
-    
     private final BlobContainerClient blobContainerClient;
 
     @Override
     public String uploadFile(File localFile, String originalFilename) {
-
-        log.info("originalFilename : {}", originalFilename);
         BlobClient blobClient = blobContainerClient.getBlobClient(originalFilename);
-        log.info(localFile.getAbsolutePath());
-        log.info("local file length = {}", localFile.length());
 
         try {
             blobClient.uploadFromFile(localFile.getAbsolutePath(), false);
@@ -53,12 +48,8 @@ public class AzureFileUploader implements FileUploader {
         }
     }
 
-
     private String extractBlobNameFromUrl(String fullUrl) {
         String containerUrl = blobContainerClient.getBlobContainerUrl();
-
-        log.info("containerUrl : {}", containerUrl);
-
         if (fullUrl.startsWith(containerUrl)) {
             return fullUrl.substring(containerUrl.length() + 1);
         } else {
